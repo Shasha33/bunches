@@ -2,16 +2,34 @@
 
 package org.jetbrains.bunches.idea.util
 
+import com.intellij.openapi.components.ServiceManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.ui.Messages
+import com.intellij.openapi.vcs.roots.VcsRootDetector
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.containers.ContainerUtil
 import org.jetbrains.bunches.file.BUNCH_FILE_NAME
+import org.jetbrains.bunches.reduce.getReducibleFiles
 import java.io.File
 
 object BunchFileUtils {
     fun bunchFile(project: Project): VirtualFile? {
         val baseDir = project.baseDir ?: return null
         return baseDir.findChild(BUNCH_FILE_NAME)
+    }
+
+    fun vcsRootPath(project: Project) : String {
+        val roots = ServiceManager.getService(project, VcsRootDetector::class.java).detect()
+
+        if (roots.isEmpty()) {
+            Messages.showMessageDialog("No vcs roots detected", "Project  error", Messages.getErrorIcon())
+        }
+
+        return roots.iterator().next().path.toString().removePrefix("file:")
+    }
+
+    fun bunchPath(project: Project) : String {
+        return project.basePath.toString()
     }
 
     fun bunchExtensions(project: Project): Set<String>? {
