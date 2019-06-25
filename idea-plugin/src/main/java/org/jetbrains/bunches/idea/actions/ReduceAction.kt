@@ -19,6 +19,11 @@ class ReduceAction : AnAction() {
         }
 
         val repoPath = vcsRootPath(project)
+
+        if (repoPath == null) {
+            return
+        }
+
         val bunchPath = bunchPath(project)
 
         val files = getReducibleFiles(repoPath, bunchPath)

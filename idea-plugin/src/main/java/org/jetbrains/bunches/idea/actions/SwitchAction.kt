@@ -34,9 +34,14 @@ class SwitchAction : AnAction() {
             return
         }
 
+        val repoPath = vcsRootPath(project)
+        if (repoPath == null) {
+            return
+        }
+
         val switchSettings = dialog.getParameters()
         val settings = Settings(
-            vcsRootPath(project),
+            repoPath,
             switchSettings.branch,
             switchSettings.commitMessage,
             switchSettings.stepByStep,

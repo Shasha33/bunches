@@ -32,9 +32,14 @@ class CleanupAction : AnAction() {
             return
         }
 
+        val repoPath = vcsRootPath(project)
+        if (repoPath == null) {
+            return
+        }
+
         val cleanupSettings = dialog.getParameters()
         val settings = Settings(
-            vcsRootPath(project),
+            repoPath,
             cleanupSettings.extension,
             cleanupSettings.commitTitle,
             cleanupSettings.isNoCommit

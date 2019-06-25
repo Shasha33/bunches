@@ -18,11 +18,12 @@ object BunchFileUtils {
         return baseDir.findChild(BUNCH_FILE_NAME)
     }
 
-    fun vcsRootPath(project: Project) : String {
+    fun vcsRootPath(project: Project) : String? {
         val roots = ServiceManager.getService(project, VcsRootDetector::class.java).detect()
 
         if (roots.isEmpty()) {
             Messages.showMessageDialog("No vcs roots detected", "Project  error", Messages.getErrorIcon())
+            return null
         }
 
         return roots.iterator().next().path.toString().removePrefix("file:")
